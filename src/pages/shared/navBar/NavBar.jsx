@@ -1,11 +1,42 @@
-import { NavLink } from "react-router-dom";
-
+import { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../../hooks/useCart";
 const NavBar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const [cart] = useCart();
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
   const navOptions = (
     <>
       <NavLink to="/">Home</NavLink>
       <NavLink to="/menu">Our Menu</NavLink>
       <NavLink to="/order/salad">Order Food</NavLink>
+      <NavLink to="/secret">Secret</NavLink>
+      <Link to="/">
+        {" "}
+        <button className="btn">
+          <FaShoppingCart className="ml-2"></FaShoppingCart>
+          <div className="badge badge-secondary">+{cart.length}</div>
+        </button>
+      </Link>
+      <>
+        {user ? (
+          <>
+            <span>{user.displayName}</span>
+            <button onClick={handleLogOut} className="btn">
+              Log Out
+            </button>
+          </>
+        ) : (
+          <NavLink to="/login">Login</NavLink>
+        )}
+      </>
     </>
   );
 
@@ -32,7 +63,7 @@ const NavBar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-black rounded-box w-52 text-white border"
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-black rounded-box w-52 text-white border gap-4"
             >
               {navOptions}
             </ul>
@@ -42,10 +73,12 @@ const NavBar = () => {
           </a>
         </div>
         <div className="navbar-center hidden lg:flex text-white">
-          <ul className="menu menu-horizontal px-1">{navOptions}</ul>
+          <ul className="menu menu-horizontal px-1 gap-4">{navOptions}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          <button onClick={handleLogOut} className="btn">
+            Log Out
+          </button>
         </div>
       </div>
     </>
