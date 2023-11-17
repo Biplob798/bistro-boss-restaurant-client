@@ -1,13 +1,16 @@
 import { createContext, useEffect, useState } from "react";
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
 import { app } from "../config/firebase.config";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -15,6 +18,9 @@ const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const googleProvider = new GoogleAuthProvider();
+  // for jwt
+  const axiosPublic = useAxiosPublic();
 
   //   cerate user
   const createUser = (email, password) => {
@@ -25,6 +31,12 @@ const AuthProvider = ({ children }) => {
   const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  // google login
+  const googleLogin = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
   };
   //   user signOut
   const logOut = () => {
@@ -43,18 +55,30 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log("current user", currentUser);
+      if (currentUser) {
+        // get token and store client side
+        const userInfo = { email: currentUser?.email };
+        axiosPublic.post("/jwt", userInfo).then((res) => {
+          if (res.data.token) {
+            localStorage.setItem("access-token", res.data.token);
+          }
+        });
+      } else {
+        // remove toke from client side
+        localStorage.removeItem("access-token");
+      }
       setLoading(false);
     });
     return () => {
       return unsubscribe();
     };
-  }, []);
+  }, [axiosPublic]);
   const authInfo = {
     user,
     loading,
     createUser,
     signIn,
+    googleLogin,
     updateUserProfile,
     logOut,
   };
