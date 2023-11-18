@@ -74,11 +74,7 @@ const NavBar = () => {
         <div className="navbar-center hidden lg:flex text-white">
           <ul className="menu menu-horizontal px-1 gap-4">{navOptions}</ul>
         </div>
-        <div className="navbar-end">
-          <button onClick={handleLogOut} className="btn">
-            Log Out
-          </button>
-        </div>
+        {/* avatar  */}
       </div>
     </>
   );
