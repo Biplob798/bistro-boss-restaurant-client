@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import SectionTitle from "../../../components/sectionTitle/SectionTitle";
 import { useLoaderData } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 
 const image_hosting_key = import.meta.env.VITE_image_hosting_key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;

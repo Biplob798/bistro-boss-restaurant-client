@@ -6,8 +6,8 @@ import pizzaImg from "../../../assets/menu/pizza-bg.jpg";
 import saladImg from "../../../assets/menu/salad-bg.jpg";
 import soupImg from "../../../assets/menu/soup-bg.jpg";
 import useMenu from "../../../hooks/useMenu";
-import SectionTitle from "../../../components/sectionTitle/SectionTitle";
 import MenuCategory from "../menuCategory/menuCategory";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 const Menu = () => {
   const [menu] = useMenu();
   const dessert = menu.filter((item) => item.category === "dessert");
