@@ -25,7 +25,7 @@ const ManageItems = () => {
           refetch();
           Swal.fire({
             title: "Deleted!",
-            text: `${item.name} has deleted`,
+            text: "Your file has been deleted.",
             icon: "success",
           });
         }
