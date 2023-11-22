@@ -16,6 +16,8 @@ import ManageItems from "../pages/dashboard/manageItems/ManageItems";
 import UpdateItem from "../pages/dashboard/updateItem/UpdateItem";
 import Payment from "../pages/dashboard/payment/Payment";
 import PaymentHistory from "../pages/dashboard/paymentHistory/PaymentHistory";
+import UserHome from "../pages/dashboard/userHome/UserHome";
+import AdminHome from "../pages/dashboard/adminHome/AdminHome";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +48,6 @@ export const router = createBrowserRouter([
         path: "secret",
         element: (
           <PrivateRoute>
-            {" "}
             <Secret></Secret>
           </PrivateRoute>
         ),
@@ -61,6 +62,11 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // normal user route
+      {
+        path: "userHome",
+        element: <UserHome />,
+      },
       {
         path: "cart",
         element: <Cart></Cart>,
@@ -74,6 +80,14 @@ export const router = createBrowserRouter([
         element: <PaymentHistory></PaymentHistory>,
       },
       // admin only routes
+      {
+        path: "adminHome",
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
+      },
       {
         path: "addItems",
         element: (
@@ -98,7 +112,9 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/menu/${params.id}`),
+          fetch(
+            `https://bistro-boss-restaurant-server-delta-three.vercel.app/menu/${params.id}`
+          ),
       },
       {
         path: "users",

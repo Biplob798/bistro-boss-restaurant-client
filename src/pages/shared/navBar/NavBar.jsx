@@ -2,8 +2,10 @@ import { Link, NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import useCart from "../../../hooks/useCart";
 import useAuth from "../../../hooks/useAuth";
+import useAdmin from "../../../hooks/useAdmin";
 const NavBar = () => {
   const { user, logOut } = useAuth();
+  const [isAdmin] = useAdmin();
   const [cart] = useCart();
 
   const handleLogOut = () => {
@@ -16,9 +18,22 @@ const NavBar = () => {
       <NavLink to="/">Home</NavLink>
       <NavLink to="/menu">Our Menu</NavLink>
       <NavLink to="/order/salad">Order Food</NavLink>
+      {
+        // user? 'true':'false'
+        // user? condition? 'double true':'one true':'false'
+      }
+      {user && isAdmin && (
+        <li>
+          <Link to="/dashboard/adminHome">Dashboard</Link>
+        </li>
+      )}
+      {user && !isAdmin && (
+        <li>
+          <Link to="/dashboard/userHome">Dashboard</Link>
+        </li>
+      )}
       <NavLink to="/secret">Secret</NavLink>
       <Link to="/dashboard/cart">
-        {" "}
         <button className="btn">
           <FaShoppingCart className="ml-2"></FaShoppingCart>
           <div className="badge badge-secondary">+{cart.length}</div>
